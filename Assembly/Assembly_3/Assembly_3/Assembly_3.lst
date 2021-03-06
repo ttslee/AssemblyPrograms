@@ -1,0 +1,126 @@
+Microsoft (R) Macro Assembler Version 12.00.40629.0	    10/04/16 10:39:51
+Assignment_3.asm					     Page 1 - 1
+
+
+				; Author: Teo Lee
+				.386
+				.model flat,stdcall
+				.stack 4096
+				ExitProcess PROTO, dwExitCode:DWORD
+ 00000000			.data
+ 00000000 0000			tempW WORD ?
+ 00000002 00			tempB BYTE ?
+ 00000003 0064 00C8 012C	intArray1 WORD 100, 200, 300, 400, 500, 600
+	   0190 01F4 0258
+ 0000000F FFFF			num WORD 000ffffh
+ 00000011 00 02 05 09 0A	intArray2 BYTE 0, 2, 5, 9, 10
+ 00000016  00000004 [		newArray2 BYTE 4 DUP(?)
+	    00
+	   ]
+ 00000000			.code
+ 00000000			MAIN PROC
+ 00000000  66| A1		mov ax, num
+	   0000000F R
+ 00000006  FE C0		inc al
+				;jmp Part2
+				; PART 1 SWAPPING ARRAY MEMBERS OF AN EVEN LENGTH ARRAY
+ 00000008  B8 00000006			mov eax, LENGTHOF intArray1
+ 0000000D  B9 00000003			mov ecx, 3
+ 00000012			decL:
+ 00000012  48				dec eax
+ 00000013  E2 FD				loop decL
+ 00000015  8B C8			mov ecx, eax
+ 00000017  BE 00000000			mov esi, 0
+ 0000001C  56				push esi
+ 0000001D			swapArray:
+ 0000001D  66| 8B 86			mov ax, intArray1[esi + 2]
+	   00000005 R
+ 00000024  66| 87 86			xchg intArray1[esi], ax
+	   00000003 R
+ 0000002B  66| 89 86			mov intArray1[esi + 2], ax
+	   00000005 R
+ 00000032  83 C6 04			add esi, TYPE intArray1 * 2
+ 00000035  E2 E6				loop swapArray
+ 00000037  5E				pop esi
+ 00000038  B9 00000006			mov ecx, LENGTHOF intArray1
+ 0000003D			checkL:
+ 0000003D  66| 8B 9E			mov bx, intArray1[esi]
+	   00000003 R
+ 00000044  83 C6 02			add esi, 2
+ 00000047  E2 F4				loop checkL
+				; PART 2 CALCULATES THE SUM OF ALL THE GAPS BETWEEN SUCCESSIVE ARRAY ELEMENTS
+ 00000049			Part2::
+ 00000049  B9 00000005			mov ecx, LENGTHOF intArray2
+ 0000004E  49				dec ecx
+ 0000004F  56				push esi
+ 00000050  BF 00000016 R		mov edi, OFFSET newArray2
+ 00000055			fillArray2:
+ 00000055  8A 86 00000012 R		mov al, intArray2[esi + TYPE intArray2]
+ 0000005B  2A 86 00000011 R		sub al, intArray2[esi]
+ 00000061  88 07			mov [edi], al
+ 00000063  83 C7 01			add edi, TYPE intArray2
+ 00000066  46				inc esi
+ 00000067  E2 EC				loop fillArray2
+ 00000069  B9 00000004			mov ecx, LENGTHOF newArray2
+ 0000006E  5E				pop esi
+ 0000006F  B8 00000000			mov eax, 0
+ 00000074			calcSum:
+ 00000074  02 86 00000016 R		add al, newArray2[esi]
+ 0000007A  46				inc esi
+ 0000007B  E2 F7				loop calcSum
+
+					INVOKE ExitProcess, 0
+ 00000084			main ENDP
+				END main
+Microsoft (R) Macro Assembler Version 12.00.40629.0	    10/04/16 10:39:51
+Assignment_3.asm					     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 DWord	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000001A DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000084 DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+ExitProcess  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
+MAIN . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000084 Public STDCALL
+  decL . . . . . . . . . . . . .	L Near	 00000012 _TEXT	
+  swapArray  . . . . . . . . . .	L Near	 0000001D _TEXT	
+  checkL . . . . . . . . . . . .	L Near	 0000003D _TEXT	
+  fillArray2 . . . . . . . . . .	L Near	 00000055 _TEXT	
+  calcSum  . . . . . . . . . . .	L Near	 00000074 _TEXT	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000003h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+Part2  . . . . . . . . . . . . .	L Near	 00000049 _TEXT	
+intArray1  . . . . . . . . . . .	Word	 00000003 _DATA	
+intArray2  . . . . . . . . . . .	Byte	 00000011 _DATA	
+newArray2  . . . . . . . . . . .	Byte	 00000016 _DATA	
+num  . . . . . . . . . . . . . .	Word	 0000000F _DATA	
+tempB  . . . . . . . . . . . . .	Byte	 00000002 _DATA	
+tempW  . . . . . . . . . . . . .	Word	 00000000 _DATA	
+
+	   0 Warnings
+	   0 Errors

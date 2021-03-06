@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Text Include="Test.asm" />
+    <Text Include="Box.asm" />
+    <Text Include="House.asm" />
+    <Text Include="Triangle.asm" />
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="Color_Box.asm" />
+  </ItemGroup>
+</Project>
